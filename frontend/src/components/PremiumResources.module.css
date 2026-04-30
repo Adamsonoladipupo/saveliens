@@ -1,0 +1,172 @@
+.section {
+  padding: 64px 0;
+  background: #f8f9ff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+
+.browseAll {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b6af5;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+}
+
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  height: 220px;
+}
+
+.cardVisual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.previewBox {
+  width: 70%;
+  height: 90px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewIcon {
+  font-size: 28px;
+  opacity: 0.3;
+  color: #fff;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.1);
+}
+
+.cardTitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.cardCategory {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+}
+
+.price {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .cardInner {
+    height: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 36px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .cardInner {
+    height: 170px;
+  }
+
+  .cardVisual {
+    padding: 16px;
+  }
+
+  .previewBox {
+    height: 60px;
+  }
+
+  .cardFooter {
+    padding: 10px 12px;
+  }
+
+  .cardTitle {
+    font-size: 11px;
+  }
+
+  .cardCategory {
+    font-size: 10px;
+  }
+
+  .price {
+    font-size: 11px;
+  }
+}

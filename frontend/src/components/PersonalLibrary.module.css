@@ -1,0 +1,87 @@
+.section {
+  padding: 100px 24px;
+  background: linear-gradient(160deg, #f5f6ff 0%, #faf0ff 60%, #f0f5ff 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(24px, 4vw, 44px);
+  font-weight: 800;
+  color: #1a1a2e;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin: 0 0 18px;
+}
+
+.desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin: 0 0 28px;
+}
+
+.learnMore {
+  display: inline-flex;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5b6af5;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.learnMore:hover {
+  opacity: 0.7;
+}
+
+.decoOrb {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91, 106, 245, 0.12) 0%, transparent 70%);
+  top: -100px;
+  left: -150px;
+  pointer-events: none;
+}
+
+.decoOrb2 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+  bottom: -80px;
+  right: -100px;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 72px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 52px 16px;
+  }
+
+  .title {
+    letter-spacing: -0.5px;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+}
