@@ -1,4 +1,5 @@
 import styles from './CTABanner.module.css';
+import svgLogo from "../assets/logo_icon.svg"
 
 export default function CTABanner({ variant = 'light' }) {
   return (
@@ -6,7 +7,8 @@ export default function CTABanner({ variant = 'light' }) {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.logoMark}>
-            <span className={styles.logoIcon}>◈</span>
+            <span className={styles.logoIcon}><img src={svgLogo} alt="logo" /></span>
+
             <span className={styles.logoText}>Saveliens</span>
           </div>
           <h2 className={styles.title}>
