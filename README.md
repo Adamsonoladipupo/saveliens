@@ -162,7 +162,7 @@ GET /api/dashboard/me
 ## Setup & Run
 
 ### Backend
-git clone https://github.com/your-username/seveliens.git  
+git clone https://github.com/Adamsonoladipupo/saveliens  
 cd backend  
 mvn spring-boot:run  
 
