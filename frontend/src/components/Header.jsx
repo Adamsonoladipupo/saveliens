@@ -15,10 +15,14 @@ const Header = () => {
                     <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
                     <a href="#" className={styles.navLink} onClick={() => setMenuOpen(false)}>Explore</a>
                     <a href="#" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-                        Product <span className={styles.arrow}>▾</span>
+                        Product <span className={styles.arrow}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.84 9.59l5.66 5.66l5.66-5.66l-.71-.7l-4.95 4.95l-4.95-4.95z"/></svg>
+                        </span>
                     </a>
                     <a href="#" className={styles.navLink} onClick={() => setMenuOpen(false)}>
-                        Resources <span className={styles.arrow}>▾</span>
+                        Resources <span className={styles.arrow}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.84 9.59l5.66 5.66l5.66-5.66l-.71-.7l-4.95 4.95l-4.95-4.95z"/></svg>
+                        </span>
                     </a>
                     <a href="#" className={styles.navLink} onClick={() => setMenuOpen(false)}>Pricing</a>
                     <div className={styles.mobileActions}>
