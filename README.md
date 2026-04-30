@@ -1,7 +1,7 @@
 # Seveliens (Full-Stack Web App)
 
 <p align="center">
-  <a href="#" target="_blank">
+  <a href="#" target="blank">
     <img src="https://img.shields.io/badge/🚀%20Live%20App-Click%20to%20Open-107B50?style=for-the-badge" alt="Live App"/>
   </a>
 </p>
