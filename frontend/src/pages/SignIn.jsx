@@ -73,10 +73,10 @@ export default function SignIn() {
         <div className={styles.card}>
           <div className={styles.formPanel}>
             <p className={styles.newTo}>
-              New to Prezi?{' '}
-              <button className={styles.signupLink}>
+              New to Saveliens?{' '}
+              <Link to="/signup"><button className={styles.signupLink}>
                 Sign up
-              </button>
+              </button></Link>
             </p>
 
             <div className={styles.inputWrap}>

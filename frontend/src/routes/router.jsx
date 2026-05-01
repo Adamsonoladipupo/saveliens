@@ -4,6 +4,7 @@ import Header from "../components/Header"
 import LandingPage from "../pages/landingPage"
 import SignUp from "../pages/SignUp"
 import SignIn from "../pages/SignIn"
+import Dashboard from "../pages/Dashbaord"
 const Router = createBrowserRouter ([
     {
         path : "header",
@@ -20,6 +21,10 @@ const Router = createBrowserRouter ([
     {
         path:"signin",
         element:<SignIn/>
+    },
+    {
+        path: "dashboard",
+        element: <Dashboard/>
     }
 ])
 export default Router 

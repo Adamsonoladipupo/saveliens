@@ -1,7 +1,7 @@
 import styles from './PremiumResources.module.css';
 
 const premiumItems = [
-  { title: 'Fltra', category: 'Figma · Figma', price: '$20.00', accent: '#1a1a2e', lightText: true },
+  { title: 'Figma', category: 'Figma · Figma', price: '$20.00', accent: '#1a1a2e', lightText: true },
   { title: 'Mercury', category: 'Figma · Figma', price: '$20.00', accent: '#fff', lightText: false, subtitle: 'Free Landing Pages' },
   { title: 'Sparks', category: 'Figma · Figma', price: '$10.00', accent: '#f8f9ff', lightText: false, subtitle: 'Database' },
   { title: 'Linkhub', category: 'Notion · notion', price: '$10.00', accent: '#1a1a2e', lightText: true, subtitle: 'Github Repositories' },
@@ -24,9 +24,9 @@ export default function PremiumResources() {
             >
               <div className={styles.cardInner}>
                 <div className={styles.cardVisual}>
-                  <div className={styles.previewBox}>
+                  {/* <div className={styles.previewBox}>
                     <span className={styles.previewIcon}>◈</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className={styles.cardFooter}>
                   <div>
