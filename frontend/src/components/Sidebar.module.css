@@ -1,0 +1,110 @@
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px;
+  border-right: 1px solid #f0f0f5;
+  flex-shrink: 0;
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  overflow: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+  background: #5b5fc7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoText {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: #5b5fc7;
+}
+
+.nav {
+  flex: 1;
+}
+
+.navLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #aaaabd;
+  margin-bottom: 12px;
+  padding-left: 12px;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.navItem:hover {
+  background: #f4f4fb;
+  color: #5b5fc7;
+}
+
+.navIcon {
+  flex-shrink: 0;
+}
+
+.active {
+  color: #5b5fc7;
+  background: #ededfc;
+  font-weight: 600;
+}
+
+.active .navIcon {
+  color: #5b5fc7;
+}
+
+.bottomNav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid #f0f0f5;
+  padding-top: 16px;
+}
+
+.logout {
+  color: #ef4444;
+}
+
+.logout:hover {
+  background: #fff1f1;
+  color: #dc2626;
+}

@@ -4,6 +4,9 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .hero::before {

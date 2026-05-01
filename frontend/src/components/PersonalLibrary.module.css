@@ -3,6 +3,9 @@
   background: linear-gradient(160deg, #f5f6ff 0%, #faf0ff 60%, #f0f5ff 100%);
   overflow: hidden;
   position: relative;
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .container {

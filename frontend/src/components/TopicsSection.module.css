@@ -1,0 +1,39 @@
+.section {
+    margin-bottom: 36px; 
+    font-family: "Inter Tight", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.heading {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.seeAll {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b5fc7;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.seeAll:hover {
+  opacity: 0.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
