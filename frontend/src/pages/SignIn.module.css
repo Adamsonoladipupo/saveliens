@@ -1,9 +1,11 @@
 
 .page {
   min-height: 100vh;
-  position: relative;
+  /* position: relative; */
   background: #fff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   overflow-x: hidden;
 }
 

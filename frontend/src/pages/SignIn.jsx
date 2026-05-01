@@ -67,7 +67,7 @@ export default function SignIn() {
         </button></Link>
       </header>
 
-      <h1 className={styles.pageTitle}>Log in</h1>
+      <h2 className={styles.pageTitle}>Sign In</h2>
 
       <main className={styles.main}>
         <div className={styles.card}>
