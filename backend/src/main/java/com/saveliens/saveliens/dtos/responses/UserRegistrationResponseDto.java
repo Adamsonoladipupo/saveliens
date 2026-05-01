@@ -1,0 +1,17 @@
+package com.saveliens.saveliens.dtos.responses;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.UUID;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserRegistrationResponseDto {
+    private String id;
+    private String email;
+}
