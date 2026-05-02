@@ -112,7 +112,7 @@ export default function SignIn() {
             </div>
 
             <p className={styles.disclaimer}>
-              If you click "Log in with Facebook" or "Log in with Google" and are not a Prezi user, you will be registered, and you agree to Prezi's{' '}
+              If you click "Log in with Facebook" or "Log in with Google" and are not a Saveliens user, you will be registered, and you agree to Saveliens's{' '}
               <a href="#" className={styles.inlineLink}>Terms &amp; Conditions</a> and{' '}
               <a href="#" className={styles.inlineLink}>Privacy Policy</a>.
             </p>
@@ -122,10 +122,10 @@ export default function SignIn() {
             <div className={styles.promoBg} />
             <div className={styles.promoContent}>
               <h2 className={styles.promoTitle}>
-                Presentations created by AI, designed for you.
+                Save and organize links by topic.
               </h2>
               <p className={styles.promoDesc}>
-                Create a custom presentation in seconds with Prezi AI. No design skills needed.
+                Build a smarter, more structured collection of resources
               </p>
               <button className={styles.promoBtn}>See how</button>
             </div>

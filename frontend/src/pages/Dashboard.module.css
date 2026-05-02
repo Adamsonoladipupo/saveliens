@@ -13,3 +13,10 @@
     font-optical-sizing: auto;
     font-style: normal;
 }
+@media (max-width: 900px){
+  .main{
+    margin-top: 40px;
+    max-width: 100%;
+    padding: 28px 10px;
+  }
+}

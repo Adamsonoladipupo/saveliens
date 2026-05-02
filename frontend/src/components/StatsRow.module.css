@@ -77,3 +77,9 @@
   color: #5b5fc7;
   background: #ededfc;
 }
+@media (max-width: 600px){
+    .row {
+    display: flex;
+    flex-direction: column;
+  }
+}

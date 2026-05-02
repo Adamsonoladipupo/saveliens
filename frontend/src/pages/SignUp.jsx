@@ -4,15 +4,15 @@ import { Link } from 'react-router';
 import logo from "../assets/saveliens_logo.png"
 
 const occupations = [
-  'Student', 'Teacher / Educator', 'Business Professional',
-  'Designer', 'Developer / Engineer', 'Marketing / Sales',
+  'Student', 'Teacher', 'Business Professional',
+  'Designer', 'Developer', 'Marketing',
   'Consultant', 'Freelancer', 'Other',
 ];
 
-const departments = [
-  'Engineering', 'Design', 'Marketing', 'Sales',
-  'Human Resources', 'Finance', 'Operations', 'Other',
-];
+// const departments = [
+//   'Engineering', 'Design', 'Marketing', 'Sales',
+//   'Human Resources', 'Finance', 'Operations', 'Other',
+// ];
 
 export default function SignUp() {
   const [form, setForm] = useState({
@@ -108,7 +108,7 @@ export default function SignUp() {
               <span className={styles.selectArrow}>▾</span>
             </div>
 
-            <div className={styles.inputWrap}>
+            {/* <div className={styles.inputWrap}>
               <select
                 className={`${styles.input} ${styles.select} ${!form.occupation ? styles.disabled : ''}`}
                 name="department"
@@ -120,7 +120,7 @@ export default function SignUp() {
                 {departments.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
               <span className={styles.selectArrow}>▾</span>
-            </div>
+            </div> */}
 
             <label className={styles.checkboxLabel}>
               <input
@@ -160,7 +160,7 @@ export default function SignUp() {
             <p className={styles.switchText}>
               Already have an account?{' '}
               <Link to="/signin"><button type="button" className={styles.switchLink}>
-                Sign Inx
+                Sign In
               </button></Link>
             </p>
           </form>
