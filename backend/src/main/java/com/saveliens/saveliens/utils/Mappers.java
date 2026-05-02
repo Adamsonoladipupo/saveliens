@@ -34,9 +34,11 @@ public class Mappers {
     public static User registrationRequest(UserRegistrationRequestDto requestDto){
         User newUser = new User();
         newUser.setEmail(requestDto.getEmail());
-        newUser.setName(requestDto.getName());
+        newUser.setFirstName(requestDto.getFirstName());
+        newUser.setLastName(requestDto.getLastName());
         newUser.setCreatedAt(LocalDateTime.now());
         newUser.setPassword(requestDto.getPassword());
+        newUser.setOccupation(requestDto.getOccupation());
         return newUser;
     }
 

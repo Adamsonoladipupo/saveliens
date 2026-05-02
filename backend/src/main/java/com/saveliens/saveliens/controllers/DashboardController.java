@@ -5,10 +5,12 @@ import com.saveliens.saveliens.services.DashboardService;
 import com.saveliens.saveliens.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/dashboard")
 public class DashboardController {

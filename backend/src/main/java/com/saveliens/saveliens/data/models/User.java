@@ -19,8 +19,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = UUID)
     private String id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
+    private Occupation occupation;
     private String password;
     private LocalDateTime createdAt;
 }

@@ -1,6 +1,15 @@
 package com.saveliens.saveliens.data.models;
 
-public enum Profession {
-
+public enum Occupation {
+    Student,
+    Teacher,
+    Educator,
+    BusinessProfessional,
+    Designer,
+    Developer,
+    Marketing,
+    Consultant,
+    Freelancer,
+    Other
     
 }
