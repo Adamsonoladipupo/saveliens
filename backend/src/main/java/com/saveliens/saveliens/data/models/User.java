@@ -14,7 +14,7 @@ import static jakarta.persistence.GenerationType.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name = "app_user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = UUID)
@@ -22,6 +22,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+
+    @Enumerated(EnumType.STRING)
     private Occupation occupation;
     private String password;
     private LocalDateTime createdAt;
