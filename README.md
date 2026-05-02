@@ -1,8 +1,8 @@
 # Seveliens (Full-Stack Web App)
 
 <p align="center">
-  <a href="#" target="blank">
-    <img src="https://img.shields.io/badge/🚀%20Live%20App-Click%20to%20Open-107B50?style=for-the-badge" alt="Live App"/>
+  <a href="https://saveliens.onrender.com/" target="blank">
+    <img src="https://img.shields.io/badge/🧪%20Staging%20Environment-View%20Preview-107B50?style=for-the-badge" alt="Staging Environment"/>
   </a>
 </p>
 
