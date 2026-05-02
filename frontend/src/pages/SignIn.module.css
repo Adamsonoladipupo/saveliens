@@ -130,6 +130,8 @@
 
 .inputWrap {
   width: 100%;
+  /* background-color: red; */
+  
 }
 
 .input {
@@ -143,6 +145,7 @@
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
+  margin-bottom: 14px;
 }
 
 .input::placeholder {
@@ -162,7 +165,7 @@
 .forgotRow {
   display: flex;
   justify-content: space-between;
-  margin: -4px 0 0;
+  margin: 0px 0px 14px 0px;
   flex-wrap: wrap;
   gap: 4px;
 }
