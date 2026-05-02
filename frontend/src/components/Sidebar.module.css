@@ -141,7 +141,7 @@
   padding-top: 16px;
 }
 
-.logout {
+.logout  {
   color: #ef4444;
 }
 
@@ -149,6 +149,7 @@
   background: #fff1f1;
   color: #dc2626;
 }
+
 
 @media (max-width: 900px) {
   .mobileTopBar {
@@ -167,7 +168,6 @@
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
   }
 
-  /* Sidebar slides in from the left as a drawer */
   .sidebar {
     position: fixed;
     top: 0;
@@ -181,13 +181,12 @@
     padding-top: 20px;
   }
 
-  /* Open state — slide into view */
   .sidebarOpen {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
   }
 
-  /* Dim overlay behind the drawer */
+
   .overlay {
     display: block;
     position: fixed;
@@ -202,7 +201,6 @@
     to   { opacity: 1; }
   }
 
-  /* Close (×) button inside the drawer */
   .closeBtn {
     display: flex;
     align-items: center;

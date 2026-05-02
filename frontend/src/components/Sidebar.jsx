@@ -71,10 +71,10 @@ export default function Sidebar() {
               <span className={styles.navText}>{label}</span>
             </a>
           ))}
-            <Link to="/signin" lassName={`${styles.navItem} ${styles.logout}`}>
+          <Link to="/signin" className={`${styles.navItem} ${styles.logout}`}>
             <LogOut size={18} className={styles.navIcon} />
             <span className={styles.navText}>Logout</span>
-            </Link>
+          </Link>
         </div>
       </aside>
     </>

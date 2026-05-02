@@ -328,6 +328,91 @@
   transform: translateY(-1px);
 }
 
+
+
+
+
+
+
+
+
+.successBanner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  text-align: center;
+}
+ 
+.apiError {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  text-align: center;
+}
+ 
+.inputError {
+  border-color: #f87171 !important;
+  background: #fff8f8 !important;
+}
+ 
+.fieldError {
+  display: block;
+  font-size: 11.5px;
+  color: #dc2626;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+ 
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+ 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+ 
+.loginBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+ 
+.signupLink {
+  color: #5b5fc7;
+  font-weight: 600;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+}
+ 
+.signupLink:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
 @media (max-width: 760px) {
   .card {
     flex-direction: column;

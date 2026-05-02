@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import styles from './SignIn.module.css';
-import { Link } from 'react-router';
-import logo from "../assets/saveliens_logo.png"
+import { Link, useNavigate, useLocation } from 'react-router';
+import logo from "../assets/saveliens_logo.png";
+
+const API_BASE = 'http://localhost:8080/api/users';
 
 const socialLogins = [
   {
@@ -55,16 +58,90 @@ const socialLogins = [
 ];
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const justRegistered = location.state?.registered === true;
+
+  const validate = () => {
+    const errs = {};
+    if (!form.email.trim()) {
+      errs.email = 'Email is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = 'Enter a valid email address.';
+    }
+    if (!form.password) errs.password = 'Password is required.';
+    return errs;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    if (apiError) setApiError('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setApiError('');
+
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email.trim().toLowerCase(),
+          password: form.password,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('userEmail', data.email);
+
+        navigate('/dashboard');
+        return;
+      }
+
+      const data = await res.json().catch(() => null);
+      setApiError(
+        data?.message ||
+        (res.status === 401 ? 'Incorrect email or password.' :
+         res.status === 404 ? 'No account found with this email.' :
+         'Something went wrong. Please try again.')
+      );
+    } catch {
+      setApiError('Unable to connect to the server. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.bgBlue} />
+
       <header className={styles.header}>
         <div className={styles.logoWrap}>
-            <div><Link to="/"><img src={logo} alt="logo" /></Link></div>
+          <Link to="/"><img src={logo} alt="Saveliens logo" /></Link>
         </div>
-        <Link to="/signup"><button className={styles.headerSignup}>
-        Sign up
-        </button></Link>
+        <Link to="/signup">
+          <button className={styles.headerSignup}>Sign up</button>
+        </Link>
       </header>
 
       <h2 className={styles.pageTitle}>Sign In</h2>
@@ -72,39 +149,66 @@ export default function SignIn() {
       <main className={styles.main}>
         <div className={styles.card}>
           <div className={styles.formPanel}>
+
+            {justRegistered && (
+              <div className={styles.successBanner} role="status">
+                🎉 Account created! Sign in to get started.
+              </div>
+            )}
+
             <p className={styles.newTo}>
               New to Saveliens?{' '}
-              <Link to="/signup"><button className={styles.signupLink}>
-                Sign up
-              </button></Link>
+              <Link to="/signup" className={styles.signupLink}>Sign up</Link>
             </p>
 
-            <div className={styles.inputWrap}>
-              <input
-                className={`${styles.input} ${styles.inputFocused}`}
-                type="email"
-                placeholder="E-mail"
-              />
-            </div>
+            {apiError && (
+              <div className={styles.apiError} role="alert">{apiError}</div>
+            )}
 
-            <div className={styles.inputWrap}>
-              <input
-                className={styles.input}
-                type="password"
-                placeholder="Password"
-              />
-            </div>
+            <form onSubmit={handleSubmit} noValidate>
+              <div className={styles.inputWrap}>
+                <input
+                  className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                  type="email"
+                  name="email"
+                  placeholder="E-mail"
+                  value={form.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                />
+                {errors.email && <span className={styles.fieldError}>{errors.email}</span>}
+              </div>
 
-            <div className={styles.forgotRow}>
-              <a href="#" className={styles.forgotLink}>Forgot your password?</a>
-              <a href="#" className={styles.forgotLink}>Problems logging in?</a>
-            </div>
+              <div className={styles.inputWrap}>
+                <input
+                  className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  autoComplete="current-password"
+                />
+                {errors.password && <span className={styles.fieldError}>{errors.password}</span>}
+              </div>
 
-            <button className={styles.loginBtn}>Log In</button>
+              <div className={styles.forgotRow}>
+                <a href="#" className={styles.forgotLink}>Forgot your password?</a>
+                <a href="#" className={styles.forgotLink}>Problems logging in?</a>
+              </div>
+
+              <button
+                type="submit"
+                className={styles.loginBtn}
+                disabled={loading}
+              >
+                {loading ? <span className={styles.spinner} /> : 'Log In'}
+              </button>
+            </form>
 
             <div className={styles.socialGrid}>
               {socialLogins.map((s) => (
-                <button key={s.name} className={styles.socialBtn}>
+                <button key={s.name} className={styles.socialBtn} type="button">
                   {s.icon}
                   <span>Log in with {s.name}</span>
                 </button>
@@ -112,7 +216,8 @@ export default function SignIn() {
             </div>
 
             <p className={styles.disclaimer}>
-              If you click "Log in with Facebook" or "Log in with Google" and are not a Saveliens user, you will be registered, and you agree to Saveliens's{' '}
+              If you click "Log in with Facebook" or "Log in with Google" and are not a Saveliens user,
+              you will be registered, and you agree to Saveliens's{' '}
               <a href="#" className={styles.inlineLink}>Terms &amp; Conditions</a> and{' '}
               <a href="#" className={styles.inlineLink}>Privacy Policy</a>.
             </p>
@@ -127,7 +232,7 @@ export default function SignIn() {
               <p className={styles.promoDesc}>
                 Build a smarter, more structured collection of resources
               </p>
-              <button className={styles.promoBtn}>See how</button>
+              <button className={styles.promoBtn} type="button">See how</button>
             </div>
           </div>
         </div>
