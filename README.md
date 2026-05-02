@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://saveliens.onrender.com/" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/⚙️%20In%20Active%20Development-View%20Progress-107B50?style=for-the-badge" alt="In Development"/>
+    <img src="https://img.shields.io/badge/⚙️%20In%20Development-View%20Progress-107B50?style=for-the-badge" alt="In Development"/>
   </a>
 </p>
 
