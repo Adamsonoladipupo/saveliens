@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DashboardResponseDto {
+    private String firstName;
     private long totalTopics;
     private long totalLinks;
     private List<TopicSummaryDto> topics;

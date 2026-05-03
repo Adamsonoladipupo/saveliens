@@ -28,6 +28,8 @@ public class DashboardService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        String firstName =user.getFirstName();
+
         List<Topic> topics = topicRepository.findAllByUser(user);
 
         List<TopicSummaryDto> topicSummaries = topics.stream()
@@ -46,6 +48,7 @@ public class DashboardService {
                 .mapToLong(TopicSummaryDto::getLinkCount)
                 .sum();
         return new DashboardResponseDto(
+                firstName,
                 topics.size(),
                 totalLinks,
                 topicSummaries
