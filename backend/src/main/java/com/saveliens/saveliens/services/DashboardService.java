@@ -1,11 +1,13 @@
 package com.saveliens.saveliens.services;
 
+import com.saveliens.saveliens.data.models.Link;
 import com.saveliens.saveliens.data.models.Topic;
 import com.saveliens.saveliens.data.models.User;
 import com.saveliens.saveliens.data.repositories.LinkRepository;
 import com.saveliens.saveliens.data.repositories.TopicRepository;
 import com.saveliens.saveliens.data.repositories.UserRepository;
 import com.saveliens.saveliens.dtos.responses.DashboardResponseDto;
+import com.saveliens.saveliens.dtos.responses.LinkSummaryDto;
 import com.saveliens.saveliens.dtos.responses.TopicSummaryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -39,7 +41,8 @@ public class DashboardService {
                     return new TopicSummaryDto(
                             topic.getId(),
                             topic.getTitle(),
-                            linkCount
+                            linkCount,
+                            topic.getDescription()
                     );
                 })
                 .toList();
@@ -47,11 +50,26 @@ public class DashboardService {
         long totalLinks = topicSummaries.stream()
                 .mapToLong(TopicSummaryDto::getLinkCount)
                 .sum();
+
+        List<Link> links = linkRepository
+                .findByTopicUserOrderByCreatedAtDesc(user);
+        List<LinkSummaryDto> linkDtos = links.stream()
+                .map(link -> new LinkSummaryDto(
+                        link.getId(),
+                        link.getUrl(),
+                        link.getTopic().getTitle()
+                ))
+                .toList();
+
+
         return new DashboardResponseDto(
                 firstName,
                 topics.size(),
                 totalLinks,
-                topicSummaries
+                topicSummaries,
+                linkDtos
+
+
         );
     }
 }

@@ -13,4 +13,5 @@ public class TopicSummaryDto {
     private String id;
     private String title;
     private long linkCount;
+    private String topicDescription;
 }

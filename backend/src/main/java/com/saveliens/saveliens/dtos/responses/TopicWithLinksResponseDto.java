@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 public class TopicWithLinksResponseDto {
     private String id;
+    private String firstName;
     private String title;
     private String description;
     private LocalDateTime createdAt;

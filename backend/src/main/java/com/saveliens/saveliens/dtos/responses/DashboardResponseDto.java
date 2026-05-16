@@ -16,4 +16,5 @@ public class DashboardResponseDto {
     private long totalTopics;
     private long totalLinks;
     private List<TopicSummaryDto> topics;
+    private List<LinkSummaryDto> recentlyAddedLinks;
 }

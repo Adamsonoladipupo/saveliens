@@ -19,12 +19,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = UUID)
     private String id;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private Occupation occupation;
+    @Column(nullable = false)
     private String password;
     private LocalDateTime createdAt;
 }

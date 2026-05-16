@@ -19,10 +19,13 @@ public class Topic{
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

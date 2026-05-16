@@ -2,6 +2,7 @@ package com.saveliens.saveliens.data.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne

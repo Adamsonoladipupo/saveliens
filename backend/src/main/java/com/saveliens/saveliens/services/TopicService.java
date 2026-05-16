@@ -81,6 +81,7 @@ public class TopicService {
 
         return new TopicWithLinksResponseDto(
                 topic.getId(),
+                topic.getUser().getFirstName(),
                 topic.getTitle(),
                 topic.getDescription(),
                 topic.getCreatedAt(),
