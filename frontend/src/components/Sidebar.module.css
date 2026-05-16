@@ -75,6 +75,41 @@
   color: #5b5fc7;
 }
 
+.userSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 0px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid #ececec;
+}
+
+.avatar{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #6C63FF;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.userInfo h4{
+    font-size: 15px;
+    margin: 0;
+}
+
+.userInfo p{
+    font-size: 12px;
+    color: #777;
+    margin-top: 3px;
+}
+
+
 .nav {
   flex: 1;
 }

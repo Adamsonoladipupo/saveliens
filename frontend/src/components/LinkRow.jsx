@@ -1,23 +1,131 @@
 import styles from './LinkRow.module.css';
-import { Eye, ExternalLink, Trash2 } from 'lucide-react';
 
-export default function LinkRow({ avatar, title, date, topic, topicLabel }) {
+import {
+  ExternalLink,
+  Trash2,
+  Link2
+} from 'lucide-react';
+
+export default function LinkRow({
+  id,
+  url,
+  topicId,
+  topicTitle,
+  setLinks,
+  setDashboardData,
+}) {
+
+  const BASE_URL =
+    "http://localhost:8080/api/topic";
+
+  const handleDeleteLink = async () => {
+
+    const confirmDelete = window.confirm(
+      "Delete this link?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+
+      const token =
+        sessionStorage.getItem("token");
+
+      const response = await fetch(
+        `${BASE_URL}/${topicId}/links/${id}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete link");
+      }
+
+      if (setLinks) {
+
+        setLinks((prev) =>
+          prev.filter(
+            (link) => link.id !== id
+          )
+        );
+
+      }
+
+      if (setDashboardData) {
+
+        setDashboardData((prev) => ({
+
+          ...prev,
+
+          totalLinks:
+            prev.totalLinks > 0
+              ? prev.totalLinks - 1
+              : 0,
+
+          recentlyAddedLinks:
+            prev.recentlyAddedLinks.filter(
+              (link) => link.id !== id
+            ),
+
+        }));
+
+      }
+
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
   return (
+
     <div className={styles.row}>
+
       <div className={styles.left}>
-        <img src={avatar} alt={title} className={styles.avatar} />
-        <div className={styles.info}>
-          <span className={styles.title}>{title}</span>
-          <span className={styles.date}>{date}</span>
+
+        <div className={styles.avatar}>
+          <Link2 size={18} />
         </div>
+
+        <div className={styles.linkInfo}>
+
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.url}
+          >
+
+            <ExternalLink size={14} />
+            <span>{url}</span>
+          </a>
+
+        </div>
+
       </div>
-      <span className={styles.topicBadge}>{topicLabel || 'TOPIC'}</span>
-      <span className={styles.topicName}>{topic}</span>
-      <div className={styles.actions}>
-        <button className={styles.actionBtn} aria-label="View"><Eye size={14} /></button>
-        <button className={styles.actionBtn} aria-label="Open"><ExternalLink size={14} /></button>
-        <button className={`${styles.actionBtn} ${styles.deleteBtn}`} aria-label="Delete"><Trash2 size={14} /></button>
+
+      <div className={styles.right}>
+
+        <div className={styles.topic}>
+          {topicTitle}
+        </div>
+
+        <button
+          className={`${styles.actionBtn} ${styles.deleteBtn}`}
+          onClick={handleDeleteLink}
+        >
+          <Trash2 size={16} />
+        </button>
+
       </div>
+
     </div>
   );
 }

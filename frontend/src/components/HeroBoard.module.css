@@ -1,3 +1,6 @@
+*{
+  box-sizing: border-box;
+}
 .hero {
   background: linear-gradient(135deg, #5b5fc7 0%, #7b7fd4 100%);
   border-radius: 16px;
@@ -56,7 +59,6 @@
   transform: translateY(-1px);
 }
 
-/* Sparkle decorations */
 .decoration {
   position: absolute;
   right: 40px;
@@ -88,4 +90,270 @@
   width: 32px;
   height: 32px;
   opacity: 0.15;
+}
+
+.overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal{
+    width: 100%;
+    max-width: 460px;
+
+    background: white;
+
+    border-radius: 24px;
+
+    padding: 28px;
+
+    position: relative;
+
+    animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade{
+    from{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.closeBtn{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: background 0.2s ease;
+
+    color: #6b7280;
+}
+
+.closeBtn:hover{
+    background: #f3f4f6;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    margin-top: 24px;
+}
+
+.form input,
+.form select{
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    font-family: inherit;
+}
+
+.form input:focus,
+.form select:focus{
+    border-color: #4f46e5;
+
+    box-shadow:
+      0 0 0 3px rgba(91,95,199,0.12);
+}
+
+.submitBtn{
+    padding: 14px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: #5b5fc7;
+    color: white;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.15s ease,
+      opacity 0.15s ease;
+
+    margin-top: 8px;
+}
+
+.submitBtn:hover{
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+.modalTitle{
+    margin-bottom: 24px;
+}
+
+.topicSection{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.topicHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.addTopicBtn{
+    border: none;
+    background: transparent;
+
+    color: #4f46e5;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition: opacity 0.2s ease;
+}
+.newTopicRow{
+    display: flex;
+    gap: 10px;
+}
+
+.saveTopicBtn{
+    border: none;
+
+    background: #5b5fc7;
+    color: white;
+
+    border-radius: 12px;
+
+    padding: 0 18px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.15s ease,
+      background 0.15s ease;
+
+    white-space: nowrap;
+}
+
+.saveTopicBtn:hover{
+    background: #4c50b5;
+    transform: translateY(-1px);
+}
+
+.topicGrid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.topicChip{
+    border: 1px solid #ddd;
+    background: white;
+
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    transition:
+      all 0.2s ease;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #374151;
+}
+
+.topicChip:hover{
+    background: #443cdd;
+    color: #ffffff;
+}
+
+.topicSelected{
+    background: #5b5fc7;
+    color: white;
+    border-color: #5b5fc7;
+
+    box-shadow:
+      0 4px 14px rgba(91,95,199,0.18);
+}
+
+.submitBtn:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 768px){
+
+  .hero{
+    padding: 28px 24px;
+    min-height: auto;
+  }
+
+  .title{
+    font-size: 22px;
+  }
+
+  .decoration{
+    display: none;
+  }
+
+  .modal{
+    padding: 24px;
+  }
+
+  .newTopicRow{
+    flex-direction: column;
+  }
+
+  .saveTopicBtn{
+    height: 46px;
+  }
+
+  .topicGrid{
+    gap: 10px;
+  }
+
+  .topicChip{
+    font-size: 12px;
+    padding: 9px 14px;
+  }
 }

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import styles from "./Topics.module.css"
 import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
-import HeroBoard from "../components/HeroBoard";
-import StatsRow from "../components/StatsRow";
-import TopicsSection from "../components/TopicSection";
-import RecentLinks from "../components/RecentLinks";
-import styles from "./Dashboard.module.css"
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import Topics from "../components/Topics";
 
-const Dashboard = () =>{
+
+
+const TopicsPage = () => {
     const BASE_URL = "http://localhost:8080/api/dashboard";
     const [dashboardData, setDashboardData] = useState(null);
     const navigate = useNavigate();
-    const [links, setLinks] = useState([]);
 
     useEffect(() => {
         const token = sessionStorage.getItem("token");
@@ -36,10 +35,7 @@ const Dashboard = () =>{
             return response.json();
             
         })
-        .then((data)=> {
-            setDashboardData(data)
-            setLinks(data.recentlyAddedLinks || []);
-        })
+        .then((data)=> setDashboardData(data))
         .catch((error) => {
             console.log(error);
             // sessionStorage.removeItem("token");
@@ -54,23 +50,14 @@ const Dashboard = () =>{
     return (
         <>
             <div className={styles.layout}>
-                <Sidebar firstName={dashboardData?.firstName} setDashboardData={setDashboardData}/>
+                <Sidebar firstName={dashboardData?.firstName}/>
                 <main className={styles.main}>
                     <SearchBar />
-                    <HeroBoard 
-                        topics={dashboardData?.topics}
-                        setDashboardData={setDashboardData}
-                    />
-                    <StatsRow 
-                        totalTopics={dashboardData?.totalTopics} 
-                        totalLinks={dashboardData?.totalLinks}
-                    />
-                    
-                    <TopicsSection topics={dashboardData?.topics} setDashboardData={setDashboardData} />
-                    <RecentLinks links={links} setLinks={setLinks} setDashboardData={setDashboardData}/>
+                    <Topics topics={dashboardData?.topics} setDashboardData={setDashboardData} />
                 </main>
             </div>
         </>
-    );
+    )
 }
-export default Dashboard
+
+export default TopicsPage;

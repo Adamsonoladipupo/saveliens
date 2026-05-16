@@ -1,10 +1,13 @@
 import React from "react"
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter, Links } from "react-router"
 import Header from "../components/Header"
 import LandingPage from "../pages/landingPage"
 import SignUp from "../pages/SignUp"
 import SignIn from "../pages/SignIn"
 import Dashboard from "../pages/Dashbaord"
+import Topics from "../pages/TopicPage"
+import LinksPage from "../pages/LinksPage"
+import TopicDetails from "../components/TopicDetails"
 const Router = createBrowserRouter ([
     {
         path : "header",
@@ -25,6 +28,18 @@ const Router = createBrowserRouter ([
     {
         path: "dashboard",
         element: <Dashboard/>
+    },
+    {
+        path: "topicspage",
+        element: <Topics />
+    },
+    {
+        path: "linkspage",
+        element: <LinksPage />
+    },
+    {
+        path:"/topics/:topicId",
+        element:<TopicDetails />
     }
 ])
 export default Router 

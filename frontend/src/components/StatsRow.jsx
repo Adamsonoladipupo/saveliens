@@ -1,12 +1,16 @@
 import styles from './StatsRow.module.css';
 import { FolderOpen, Link2, MoreVertical } from 'lucide-react';
 
-const stats = [
-  { icon: FolderOpen, count: 15, label: 'Topics' },
-  { icon: Link2, count: 25, label: 'Links' },
-];
+  // const countTopics = "";
+  // const countLinks = "";
 
-export default function StatsRow() {
+
+
+export default function StatsRow({totalTopics, totalLinks}) {
+  const stats = [
+  { icon: FolderOpen, count: totalTopics, label: 'Topics' },
+  { icon: Link2, count: totalLinks, label: 'Links'},
+];
   return (
     <div className={styles.row}>
       {stats.map(({ icon: Icon, count, label }) => (
