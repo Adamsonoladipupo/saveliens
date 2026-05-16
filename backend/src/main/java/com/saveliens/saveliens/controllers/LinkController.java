@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "https://saveliens.onrender.com"
+})
 @RestController
 @RequestMapping("/api/topic/{topicId}/links")
 public class LinkController {
