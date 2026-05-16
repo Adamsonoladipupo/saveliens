@@ -9,7 +9,9 @@ import Topics from "../components/Topics";
 
 
 const TopicsPage = () => {
-    const BASE_URL = "http://localhost:8080/api/dashboard";
+    // const BASE_URL = "http://localhost:8080/api/dashboard";
+    const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/dashboard`;
+
     const [dashboardData, setDashboardData] = useState(null);
     const navigate = useNavigate();
 

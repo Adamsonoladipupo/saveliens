@@ -6,6 +6,9 @@ import styles from "./TopicDetails.module.css";
 
 export default function TopicDetails() {
 
+  // BASE_URL="http://localhost:8080/api/topic/"
+  const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/topic`;
+
   const { topicId } = useParams();
 
   const [topic, setTopic] = useState(null);
@@ -17,7 +20,7 @@ export default function TopicDetails() {
     const token = sessionStorage.getItem("token");
 
     fetch(
-      `http://localhost:8080/api/topic/${topicId}`,
+      `${BASE_URL}${topicId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

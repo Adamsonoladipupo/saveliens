@@ -4,7 +4,8 @@ import { Plus, X } from 'lucide-react';
 
 export default function HeroBoard({ topics = [], setDashboardData }) {
 
-  const BASE_URL = "http://localhost:8080/api/topic"
+  // const BASE_URL = "http://localhost:8080/api/topic"
+  const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/topic`;
 
   const [linkUrl, setLinkUrl] = useState("");
 

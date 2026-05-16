@@ -3,7 +3,8 @@ import styles from './SignUp.module.css';
 import { Link, useNavigate } from 'react-router';
 import logo from "../assets/saveliens_logo.png";
 
-const API_BASE = 'http://localhost:8080/api/users';
+// const BASE_URL = 'http://localhost:8080/api/users';
+const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/users`;
 
 const occupations = [
   'Student',
@@ -92,7 +93,7 @@ export default function SignUp() {
 
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/register`, {
+      const res = await fetch(`${BASE_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

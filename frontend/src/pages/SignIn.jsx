@@ -3,7 +3,8 @@ import styles from './SignIn.module.css';
 import { Link, useNavigate, useLocation } from 'react-router';
 import logo from "../assets/saveliens_logo.png";
 
-const API_BASE = 'http://localhost:8080/api/users';
+// const BASE_URL = 'http://localhost:8080/api/users';
+const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/users`;
 
 const socialLogins = [
   {
@@ -98,7 +99,7 @@ export default function SignIn() {
 
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/login`, {
+      const res = await fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

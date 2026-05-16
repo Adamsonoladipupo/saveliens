@@ -14,8 +14,8 @@ export default function TopicCard({
   setDashboardData
 }) {
 
-  const BASE_URL =
-    "http://localhost:8080/api/topic";
+  // const BASE_URL ="http://localhost:8080/api/topic";
+  const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/topic`;
 
   const handleDeleteTopic = async (e) => {
 
