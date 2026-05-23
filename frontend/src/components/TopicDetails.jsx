@@ -20,7 +20,7 @@ export default function TopicDetails() {
     const token = sessionStorage.getItem("token");
 
     fetch(
-      `${BASE_URL}${topicId}`,
+      `${BASE_URL}/${topicId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
