@@ -21,6 +21,7 @@ const posts = [
   },
 ];
 
+
 export default function Blog() {
   return (
     <section className={styles.section}>
