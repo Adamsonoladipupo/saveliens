@@ -5,8 +5,13 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import Router from './routes/router'
 import { RouterProvider } from 'react-router'
+import { warmupBackend } from "./services/backendWarmup";
 
 function App() {
+  useEffect(() => {
+    // Start backend without blocking the frontend.
+    warmupBackend();
+  }, []);
   return (
     <>
       <RouterProvider router={Router}/>
