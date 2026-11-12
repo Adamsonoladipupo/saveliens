@@ -40,8 +40,7 @@ public class UserServiceImp implements UserService{
     public LoginResponseDto login(LoginRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(()-> new EmailDuplicateException("Invalid credentials"));
-
-        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
+        if (user.getPassword() == null || !passwordEncoder.matches( requestDto.getPassword(), user.getPassword())) {
             throw  new InvalidPasswordException("Sorry, invalid password");
         }
         String token = jwtService.generateToken(user);

@@ -8,6 +8,7 @@ import com.saveliens.saveliens.data.repositories.TopicRepository;
 import com.saveliens.saveliens.data.repositories.UserRepository;
 import com.saveliens.saveliens.dtos.requests.AddLinkRequestDto;
 import com.saveliens.saveliens.dtos.responses.AddLinkResponseDto;
+import com.saveliens.saveliens.exceptions.NonExistingUserException;
 import com.saveliens.saveliens.exceptions.NullLinkException;
 import com.saveliens.saveliens.exceptions.NullTopicException;
 import com.saveliens.saveliens.exceptions.UnauthorizedException;
@@ -50,30 +51,71 @@ public class LinkService {
         return Mappers.mapToLinkDTO(link);
     }
 
-    public List<AddLinkResponseDto> getAllUserLinks(String topicId){
+
+    public List<AddLinkResponseDto> getAllUserLinks(String topicId) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found")
+                );
+
         Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new NullTopicException("Topic not found"));
+                .orElseThrow(() ->
+                        new NullTopicException("Topic not found")
+                );
+
+        // Security: verify topic ownership before retrieving links
+        if (!topic.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedException(
+                    "You are not authorized to access this topic's links"
+            );
+        }
 
         List<Link> links = linkRepository.findAllByTopicId(topicId);
-        List<AddLinkResponseDto> response = new ArrayList<>();
-        for (Link link : links){
-            response.add(Mappers.mapToLinkDTO(link));
-        }
-        return response;
+
+        return links.stream()
+                .map(Mappers::mapToLinkDTO)
+                .toList();
     }
 
-    public void deleteLink(String linkId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+    public void deleteLink(String topicId, String linkId) {
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+
         String email = auth.getName();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new NonExistingUserException("User not found")
+                );
+
+        Topic topic = topicRepository.findById(topicId)
+                .orElseThrow(() ->
+                        new NullTopicException("Topic not found")
+                );
+
+        if (!topic.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedException(
+                    "You are not authorized to access this topic"
+            );
+        }
 
         Link link = linkRepository.findById(linkId)
-                .orElseThrow(() -> new NullLinkException("Sorry link does not exist"));
+                .orElseThrow(() ->
+                        new NullLinkException("Link not found")
+                );
 
-        if (!link.getTopic().getUser().getId().equals(user.getId())) {
-            throw new UnauthorizedException("Unauthorized");
+        if (!link.getTopic().getId().equals(topic.getId())) {
+            throw new NullLinkException(
+                    "Link does not belong to this topic"
+            );
         }
 
         linkRepository.delete(link);
