@@ -28,7 +28,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Occupation occupation;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String password;
+
     private LocalDateTime createdAt;
 }
