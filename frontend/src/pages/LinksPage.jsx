@@ -1,111 +1,107 @@
-import React from "react";
+
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Sidebar from "../components/Sidebar";
+import SearchBar from "../components/SearchBar";
+import Links from "../components/Links";
+import PageSkeleton from "../components/skeletons/PageSkeleton";
+import PageError from "../components/PageError";
 
 import styles from "./Links.module.css";
 
-import { useState, useEffect } from "react";
+import { apiFetch,AuthenticationError,} from "../services/apiClient";
 
-import { useNavigate } from "react-router";
+export default function LinksPage() {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
-import Sidebar from "../components/Sidebar";
+  const navigate = useNavigate();
 
-import SearchBar from "../components/SearchBar";
+  const loadLinks = useCallback(async (signal) => {
+    setLoading(true);
+    setError("");
 
-import Links from "../components/Links";
+    try {
+      const response = await apiFetch("/api/dashboard/me", {
+        signal,
+      });
 
-const LinksPage = () => {
+      if (response.status === 401 || response.status === 403) {
+        navigate("/signin", { replace: true });
+        return;
+      }
 
-    // const BASE_URL ="http://localhost:8080/api/dashboard";
-    const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/dashboard`;
+      if (!response.ok) {
+        throw new Error(`Failed to load links: ${response.status}`);
+      }
 
-    const [dashboardData, setDashboardData] =
-        useState(null);
+      const data = await response.json();
 
-    const navigate = useNavigate();
+      if (!signal.aborted) {
+        setDashboardData(data);
+      }
+    } 
+    catch (err) {
+        if (signal.aborted) return;
 
-    useEffect(() => {
-
-        const token =
-            sessionStorage.getItem("token");
-
-        if (!token) {
-
-            navigate("/signin");
-
+        if (err instanceof AuthenticationError) {
+            navigate("/signin", { replace: true });
             return;
-
         }
 
-        fetch(`${BASE_URL}/me`, {
+        console.error("Page loading error:", err);
 
-            method: "GET",
-
-            headers: {
-
-                Authorization: `Bearer ${token}`,
-
-                "Content-Type": "application/json",
-
-            },
-
-        })
-
-        .then((response) => {
-
-            if (!response.ok) {
-
-                throw new Error("Unauthorized");
-
-            }
-
-            return response.json();
-
-        })
-
-        .then((data) => {
-
-            setDashboardData(data);
-
-        })
-
-        .catch((error) => {
-
-            console.log(error);
-
-            navigate("/signin");
-
-        });
-
-    }, []);
-
-    if (!dashboardData) {
-
-        return <h1>Loading...</h1>;
-
+        setError(
+            "Unable to load your workspace. Please try again."
+        );
     }
+    finally {
+      if (!signal.aborted) {
+        setLoading(false);
+      }
+    }
+  }, [navigate]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    loadLinks(controller.signal);
+
+    return () => controller.abort();
+  }, [loadLinks, retryCount]);
+
+  if (loading) {
+    return <PageSkeleton variant="links" />;
+  }
+
+  if (error) {
     return (
-
-        <div className={styles.layout}>
-
-            <Sidebar
-                firstName={dashboardData?.firstName}
-            />
-
-            <main className={styles.main}>
-
-                <SearchBar />
-
-                <Links
-                    links={dashboardData?.recentlyAddedLinks}
-                    setDashboardData={setDashboardData}
-                />
-
-            </main>
-
-        </div>
-
+      <PageError
+        message={error}
+        onRetry={() => setRetryCount((count) => count + 1)}
+      />
     );
+  }
 
-};
+  if (!dashboardData) {
+    return null;
+  }
 
-export default LinksPage;
+  return (
+    <div className={styles.layout}>
+      <Sidebar firstName={dashboardData.firstName} />
+
+      <main className={styles.main}>
+        <SearchBar />
+
+        <Links
+          links={dashboardData.recentlyAddedLinks || []}
+          setDashboardData={setDashboardData}
+        />
+      </main>
+    </div>
+  );
+}

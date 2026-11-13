@@ -240,4 +240,114 @@ public class ResendEmailService implements EmailService {
                 .toBodilessEntity();
     }
 
+
+    @Override
+    public void sendPasswordResetEmail(
+            String email,
+            String firstName,
+            String resetUrl
+    ) {
+        String html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <body style="margin:0;padding:32px;
+            background:#f7f7fb;
+            font-family:Arial,sans-serif;">
+          <div style="max-width:560px;margin:auto;
+              background:white;padding:32px;
+              border-radius:16px;">
+            <h2 style="color:#5b5fc7;">
+              Reset your Saveliens password
+            </h2>
+            <p>Hi %s,</p>
+            <p>
+              We received a request to reset
+              your Saveliens account password.
+            </p>
+            <p>
+              Click the button below to choose
+              a new password.
+            </p>
+            <a href="%s"
+               style="display:inline-block;
+               padding:12px 20px;
+               background:#5b5fc7;
+               color:white;
+               text-decoration:none;
+               border-radius:8px;">
+              Reset Password
+            </a>
+            <p>
+              This link expires in 15 minutes
+              and can only be used once.
+            </p>
+            <p>
+              If you didn't request this,
+              you can safely ignore this email.
+            </p>
+            <p style="color:#6b7280;font-size:13px;">
+              Saveliens Security
+            </p>
+          </div>
+        </body>
+        </html>
+        """.formatted(
+                escapeHtml(firstName),
+                escapeHtml(resetUrl)
+        );
+
+        sendEmail(
+                email,
+                "Reset your Saveliens password",
+                html
+        );
+    }
+
+    @Override
+    public void sendPasswordResetConfirmation(
+            String email,
+            String firstName
+    ) {
+        String html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <body style="margin:0;padding:32px;
+            background:#f7f7fb;
+            font-family:Arial,sans-serif;">
+          <div style="max-width:560px;margin:auto;
+              background:white;padding:32px;
+              border-radius:16px;">
+            <h2 style="color:#5b5fc7;">
+              Your password has been reset
+            </h2>
+            <p>Hi %s,</p>
+            <p>
+              Your Saveliens account password
+              has been reset successfully.
+            </p>
+            <p>
+              Your previous sessions have
+              been invalidated. Please sign
+              in with your new password.
+            </p>
+            <p>
+              If you didn't perform this action,
+              contact Saveliens support immediately.
+            </p>
+            <p style="color:#6b7280;font-size:13px;">
+              Saveliens Security
+            </p>
+          </div>
+        </body>
+        </html>
+        """.formatted(escapeHtml(firstName));
+
+        sendEmail(
+                email,
+                "Security alert: Saveliens password reset",
+                html
+        );
+    }
+
+
 }
