@@ -1,14 +1,23 @@
 .sidebar {
   width: 220px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
+
   background: #ffffff;
   display: flex;
   flex-direction: column;
   padding: 28px 20px;
   border-right: 1px solid #f0f0f5;
   flex-shrink: 0;
-  position: relative;
+
+  position: sticky;
+  top: 0;
   z-index: 200;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+
   font-family: "Inter Tight", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;

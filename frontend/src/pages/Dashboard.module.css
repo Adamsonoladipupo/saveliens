@@ -1,25 +1,40 @@
 .layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
   background: #f7f7fb;
 }
 
 .main {
-    flex: 1;
-    padding: 28px 32px;
-    overflow-y: auto;
-    max-width: calc(100% - 220px);
-    font-family: "Inter Tight", sans-serif;
-    font-optical-sizing: auto;
-    font-style: normal;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 28px 32px;
+
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+
+  font-family: "Inter Tight", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
-@media (max-width: 900px){
-  .main{
-    margin-top: 40px;
-    max-width: 100%;
-    padding: 28px 10px;
-  }
+
+@media (max-width: 900px) {
   .layout {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .main {
+    margin-top: 40px;
+    max-width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 28px 10px;
+    overflow-y: visible;
   }
 }

@@ -50,12 +50,25 @@ public class UserServiceImp implements UserService{
 
     @Override
     public LoginResponseDto login(LoginRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(()-> new EmailDuplicateException("Invalid credentials"));
-        if (user.getPassword() == null || !passwordEncoder.matches( requestDto.getPassword(), user.getPassword())) {
-            throw  new InvalidPasswordException("Sorry, invalid password");
+        User user = userRepository
+                .findByEmail(requestDto.getEmail())
+                .orElseThrow(() ->
+                        new InvalidPasswordException("Invalid email or password")
+                );
+
+        if (user.getPassword() == null ||
+                !passwordEncoder.matches(
+                        requestDto.getPassword(),
+                        user.getPassword()
+                )) {
+            throw new InvalidPasswordException("Invalid email or password");
         }
+
         String token = jwtService.generateToken(user);
-        return new LoginResponseDto(token, requestDto.getEmail());
+
+        return new LoginResponseDto(
+                token,
+                user.getEmail()
+        );
     }
 }
