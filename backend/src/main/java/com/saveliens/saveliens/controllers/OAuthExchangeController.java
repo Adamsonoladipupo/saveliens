@@ -12,6 +12,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.saveliens.saveliens.events.LoginSucceededEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Map;
 
 @RestController
@@ -30,22 +34,27 @@ public class OAuthExchangeController {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenCookieService refreshTokenCookieService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public OAuthExchangeController(
             OAuthExchangeService exchanges,
             UserRepository users,
             JwtService jwtService,
             RefreshTokenService refreshTokenService,
-            RefreshTokenCookieService refreshTokenCookieService
+            RefreshTokenCookieService refreshTokenCookieService,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.exchanges = exchanges;
         this.users = users;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenCookieService = refreshTokenCookieService;
+        this.eventPublisher = eventPublisher;
     }
 
+
     @PostMapping("/exchange")
+    @Transactional
     public ResponseEntity<?> exchange(
             @RequestBody Map<String, String> request
     ) {
@@ -75,6 +84,14 @@ public class OAuthExchangeController {
                 refresh.refreshToken()
         );
 
+        eventPublisher.publishEvent(
+                new LoginSucceededEvent(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getEmail()
+                )
+        );
+
         return ResponseEntity
                 .ok()
                 .headers(headers)
@@ -87,4 +104,5 @@ public class OAuthExchangeController {
                         )
                 );
     }
+
 }

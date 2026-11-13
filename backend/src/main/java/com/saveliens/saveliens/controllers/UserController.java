@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.saveliens.saveliens.events.LoginSucceededEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
+
 @CrossOrigin(
         origins = {
                 "http://localhost:5173",
@@ -31,17 +35,20 @@ public class UserController {
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenCookieService refreshTokenCookieService;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public UserController(
             UserServiceImp userService,
             RefreshTokenService refreshTokenService,
             RefreshTokenCookieService refreshTokenCookieService,
-            UserRepository userRepository
+            UserRepository userRepository,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenCookieService = refreshTokenCookieService;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @GetMapping("/greet")
@@ -61,26 +68,22 @@ public class UserController {
                 .body(responseDto);
     }
 
+
     @PostMapping("/login")
+    @Transactional
     public ResponseEntity<LoginResponseDto> login(
             @RequestBody LoginRequestDto requestDto
     ) {
-        // Authenticate user and generate access token.
         LoginResponseDto responseDto =
                 userService.login(requestDto);
 
-        // Retrieve the authenticated user.
         User user = userRepository
-                .findByEmail(
-                        requestDto.getEmail().trim().toLowerCase()
-                )
+                .findByEmail(requestDto.getEmail())
                 .orElseThrow();
 
-        // Generate and persist a refresh token.
         RefreshTokenService.IssuedRefreshToken refresh =
                 refreshTokenService.issueToken(user);
 
-        // Attach refresh token as an HttpOnly cookie.
         HttpHeaders headers = new HttpHeaders();
 
         refreshTokenCookieService.setCookie(
@@ -88,10 +91,18 @@ public class UserController {
                 refresh.refreshToken()
         );
 
-        // Return the existing login response.
+        eventPublisher.publishEvent(
+                new LoginSucceededEvent(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getEmail()
+                )
+        );
+
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .body(responseDto);
     }
+
 }

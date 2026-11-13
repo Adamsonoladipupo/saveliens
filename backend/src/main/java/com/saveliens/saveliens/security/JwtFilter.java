@@ -14,6 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+import com.saveliens.saveliens.data.models.User;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -55,10 +57,20 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
 
-            if (!userRepository.existsByEmail(email)) {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "User account no longer exists"
+                            )
+                    );
+
+            int tokenVersion =
+                    jwtService.extractTokenVersion(token);
+
+            if (tokenVersion != user.getTokenVersion()) {
                 response.sendError(
                         HttpServletResponse.SC_UNAUTHORIZED,
-                        "User account no longer exists"
+                        "Authentication token has been revoked"
                 );
                 return;
             }

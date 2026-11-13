@@ -40,9 +40,11 @@ public class JwtService {
     public String generateToken(User user) {
         long now = System.currentTimeMillis();
 
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
+                .claim("tokenVersion", user.getTokenVersion())
                 .setIssuedAt(new Date(now))
                 .setExpiration(
                         new Date(now + accessTokenExpirationMs)
@@ -56,6 +58,19 @@ public class JwtService {
 
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
+    }
+
+    public int extractTokenVersion(String token) {
+        Integer version = extractAllClaims(token)
+                .get("tokenVersion", Integer.class);
+
+        if (version == null) {
+            throw new IllegalArgumentException(
+                    "Token version is missing"
+            );
+        }
+
+        return version;
     }
 
     private Claims extractAllClaims(String token) {

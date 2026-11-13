@@ -32,5 +32,8 @@ public class User {
     @Column(nullable = true)
     private String password;
 
+    @Column(name = "token_version", nullable = false)
+    private int tokenVersion = 0;
+
     private LocalDateTime createdAt;
 }
