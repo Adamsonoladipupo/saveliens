@@ -1,8 +1,69 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import styles from './HeroBoard.module.css';
-import { Plus, X } from 'lucide-react';
+// import { Plus, X } from 'lucide-react';
+
+import { useRef, useState } from "react";
+import { Plus, Sparkles, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+import { apiFetch, AuthenticationError } from "../services/apiClient";
+import { suggestLinkCategory } from "../services/aiService";
+
 
 export default function HeroBoard({ topics = [], setDashboardData }) {
+
+  const handleAiSuggest = async () => {
+    const url = linkUrl.trim();
+
+    try {
+      const parsed = new URL(url);
+
+      if (!["http:", "https:"].includes(parsed.protocol)) {
+        throw new Error("Invalid URL");
+      }
+    } catch {
+      setAiError("Enter a valid HTTP or HTTPS URL.");
+      return;
+    }
+
+    clearAiSuggestion();
+
+    const controller = new AbortController();
+    aiRequestRef.current = controller;
+
+    setAiLoading(true);
+
+    try {
+      const suggestion = await suggestLinkCategory(
+        url,
+        controller.signal
+      );
+
+      if (controller.signal.aborted) return;
+
+      setAiSuggestion(suggestion);
+      setAiError("");
+    } catch (error) {
+      if (controller.signal.aborted) return;
+
+      if (error instanceof AuthenticationError) {
+        navigate("/signin", { replace: true });
+        return;
+      }
+
+      setAiError(
+        error.message || "Unable to generate a suggestion."
+      );
+    } finally {
+      if (aiRequestRef.current === controller) {
+        aiRequestRef.current = null;
+        setAiLoading(false);
+      }
+    }
+  };
+
+
+
 
   // const BASE_URL = "http://localhost:8080/api/topic"
   const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/topic`;
@@ -24,15 +85,35 @@ export default function HeroBoard({ topics = [], setDashboardData }) {
   const openModal = () => setIsModalOpen(true);
 
   const closeModal = () => {
+    clearAiSuggestion();
+
     setIsModalOpen(false);
     setSelectedTopic(null);
     setShowNewTopicInput(false);
     setNewTopic("");
     setNewTopicDescription("");
+    setLinkUrl("");
+  };
+
+  const navigate = useNavigate();
+  const aiRequestRef = useRef(null);
+
+  const [aiSuggestion, setAiSuggestion] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
+
+  const clearAiSuggestion = () => {
+    aiRequestRef.current?.abort();
+    aiRequestRef.current = null;
+
+    setAiSuggestion(null);
+    setAiLoading(false);
+    setAiError("");
   };
 
 
 const handleAddTopic = async () => {
+
 
   const trimmedTopic = newTopic.trim();
   const trimmedDescription = newTopicDescription.trim();
@@ -206,11 +287,129 @@ const handleSaveLink = async (e) => {
             <form className={styles.form}  onSubmit={handleSaveLink}>
 
               <input
-                  type="url"
-                  placeholder="Paste your link here..."
-                  value={linkUrl}
-                  onChange={(e) => setLinkUrl(e.target.value)}
+                type="url"
+                required
+                placeholder="Paste your link here..."
+                value={linkUrl}
+                onChange={(event) => {
+                  clearAiSuggestion();
+                  setLinkUrl(event.target.value);
+                }}
               />
+
+
+
+
+              <div className={styles.aiSection}>
+                <button
+                  type="button"
+                  className={styles.aiButton}
+                  onClick={handleAiSuggest}
+                  disabled={!linkUrl.trim() || aiLoading || isLoading}
+                >
+                  <Sparkles size={16} />
+                  {aiLoading ? "Analyzing link..." : "Suggest with AI"}
+                </button>
+
+                {aiLoading && (
+                  <div className={styles.aiSkeleton} aria-live="polite">
+                    <div className={styles.aiSkeletonLine} />
+                    <div className={styles.aiSkeletonLine} />
+                    <div className={styles.aiSkeletonLine} />
+                  </div>
+                )}
+
+                {aiError && (
+                  <p className={styles.aiError} role="alert">
+                    {aiError}
+                  </p>
+                )}
+
+                {aiSuggestion && (
+                  <div className={styles.aiResult}>
+                    <div className={styles.aiResultHeader}>
+                      <Sparkles size={16} />
+                      <strong>AI Recommendation</strong>
+                    </div>
+
+                    {aiSuggestion.type === "EXISTING_TOPIC" && (
+                      <>
+                        <p>
+                          Suggested topic:{" "}
+                          <strong>{aiSuggestion.suggestedTopicName}</strong>
+                        </p>
+
+                        <button
+                          type="button"
+                          className={styles.aiAcceptBtn}
+                          onClick={() => {
+                            setSelectedTopic(aiSuggestion.suggestedTopicId);
+                            setShowNewTopicInput(false);
+                          }}
+                        >
+                          Use this topic
+                        </button>
+                      </>
+                    )}
+
+                    {aiSuggestion.type === "NEW_TOPIC" && (
+                      <>
+                        <p>
+                          Suggested new topic:{" "}
+                          <strong>{aiSuggestion.suggestedTopicName}</strong>
+                        </p>
+
+                        <p>{aiSuggestion.suggestedTopicDescription}</p>
+
+                        <button
+                          type="button"
+                          className={styles.aiAcceptBtn}
+                          onClick={() => {
+                            setNewTopic(aiSuggestion.suggestedTopicName);
+                            setNewTopicDescription(
+                              aiSuggestion.suggestedTopicDescription
+                            );
+                            setShowNewTopicInput(true);
+                            setSelectedTopic(null);
+                          }}
+                        >
+                          Review new topic
+                        </button>
+                      </>
+                    )}
+
+                    {aiSuggestion.type === "UNCERTAIN" && (
+                      <p>
+                        We couldn't confidently categorize this link.
+                        Please choose a topic manually.
+                      </p>
+                    )}
+
+                    {aiSuggestion.summary && (
+                      <p className={styles.aiSummary}>
+                        <strong>Summary:</strong> {aiSuggestion.summary}
+                      </p>
+                    )}
+
+                    {aiSuggestion.reason && (
+                      <p className={styles.aiReason}>
+                        {aiSuggestion.reason}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+
+
+
+
+
+
+
+
+
+
 
               <div className={styles.topicSection}>
 
