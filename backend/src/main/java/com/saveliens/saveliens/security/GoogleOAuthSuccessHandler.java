@@ -16,6 +16,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+import com.saveliens.saveliens.events.AccountCreatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
+
 @Component
 public class GoogleOAuthSuccessHandler
         implements AuthenticationSuccessHandler {
@@ -23,15 +26,18 @@ public class GoogleOAuthSuccessHandler
     private final OAuthIdentityRepository identities;
     private final UserRepository users;
     private final OAuthExchangeService exchanges;
+    private final ApplicationEventPublisher eventPublisher;
 
     public GoogleOAuthSuccessHandler(
             OAuthIdentityRepository identities,
             UserRepository users,
-            OAuthExchangeService exchanges
+            OAuthExchangeService exchanges,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.identities = identities;
         this.users = users;
         this.exchanges = exchanges;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -87,6 +93,13 @@ public class GoogleOAuthSuccessHandler
             identity.setProviderUserId(providerId);
             identity.setUser(user);
             identities.save(identity);
+            eventPublisher.publishEvent(
+                    new AccountCreatedEvent(
+                            user.getId(),
+                            user.getFirstName(),
+                            user.getEmail()
+                    )
+            );
         }
 
         String code = exchanges.create(user.getId());
