@@ -24,7 +24,7 @@ const navItems = [
     {
     icon: BarChart2,
     label: 'Analyze',
-    path: '/#',
+    path: '/analyze',
   },
 ];
 

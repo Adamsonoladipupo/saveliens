@@ -6,6 +6,8 @@ import logo from "../assets/saveliens_logo.png";
 
 import { activateSession } from "../services/apiClient";
 
+import { Eye, EyeOff } from "lucide-react";
+
 const API_BASE_URL = import.meta.env.DEV
   ? ""
   : import.meta.env.VITE_API_BASE_URL;
@@ -28,6 +30,8 @@ export default function SignIn() {
   const justRegistered = location.state?.registered === true;
 
   const passwordChangeMessage = location.state?.message;
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -114,16 +118,36 @@ export default function SignIn() {
         return;
       }
 
+
+
+
       const data = await res.json().catch(() => null);
 
-      setApiError(
-        data?.message ||
-          (res.status === 401
-            ? "Incorrect email or password."
-            : res.status === 404
-              ? "No account found with this email."
-              : "Something went wrong. Please try again.")
-      );
+      const messages = {
+        INVALID_CREDENTIALS: "Invalid email or password.",
+        VALIDATION_ERROR: "Please check the information you entered.",
+        ACCOUNT_DISABLED: "Your account is disabled. Contact support.",
+      };
+
+      if (res.status >= 500) {
+        setApiError(
+          "Our server is experiencing a problem. Please try again later."
+        );
+      } else {
+        setApiError(
+          messages[data?.error] ||
+            (res.status === 401
+              ? "Invalid email or password."
+              : res.status === 429
+                ? "Too many attempts. Please try again later."
+                : "Unable to sign in. Please try again.")
+        );
+      }
+
+
+
+
+
     } catch (error) {
       console.error("Login failed:", error);
 
@@ -224,17 +248,29 @@ export default function SignIn() {
               </div>
 
               <div className={styles.inputWrap}>
-                <input
-                  className={`${styles.input} ${
-                    errors.password ? styles.inputError : ""
-                  }`}
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={form.password}
-                  onChange={handleChange}
-                  autoComplete="current-password"
-                />
+                <div className={styles.passwordField}>
+                  <input
+                    className={`${styles.input} ${
+                      errors.password ? styles.inputError : ""
+                    }`}
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={form.password}
+                    onChange={handleChange}
+                    autoComplete="current-password"
+                  />
+
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-pressed={showPassword}
+                  >
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  </button>
+                </div>
 
                 {errors.password && (
                   <span className={styles.fieldError}>
