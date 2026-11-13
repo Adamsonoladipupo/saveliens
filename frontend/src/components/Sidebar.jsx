@@ -21,10 +21,10 @@ const navItems = [
     label: 'Links',
     path: '/linkspage',
   },
-    {
+  {
     icon: BarChart2,
-    label: 'Analyze',
-    path: '/analyze',
+    label: "Analyze",
+    path: "/analyze",
   },
 ];
 
