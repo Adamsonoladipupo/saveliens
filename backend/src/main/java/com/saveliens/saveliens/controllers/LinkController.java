@@ -39,7 +39,7 @@ public class LinkController {
 
     @DeleteMapping("/{linkId}")
     public ResponseEntity<Void> deleteLink(@PathVariable String topicId, @PathVariable String linkId) {
-        linkService.deleteLink(linkId);
+        linkService.deleteLink(linkId, topicId);
         return ResponseEntity.noContent().build();
     }
 

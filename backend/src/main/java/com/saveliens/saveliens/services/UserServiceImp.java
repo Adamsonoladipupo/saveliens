@@ -15,6 +15,9 @@ import com.saveliens.saveliens.utils.Mappers;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.saveliens.saveliens.events.AccountCreatedEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Service
@@ -24,8 +27,10 @@ public class UserServiceImp implements UserService{
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
+    @Transactional
     public UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto) {
         if(userRepository.findByEmail(requestDto.getEmail()).isPresent()){
             throw new EmailDuplicateException("email already exist");
@@ -33,6 +38,13 @@ public class UserServiceImp implements UserService{
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         User user = Mappers.registrationRequest(requestDto);
         userRepository.save(user);
+        eventPublisher.publishEvent(
+                new AccountCreatedEvent(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getEmail()
+                )
+        );
         return Mappers.registrationResponse(user);
     }
 
@@ -40,8 +52,7 @@ public class UserServiceImp implements UserService{
     public LoginResponseDto login(LoginRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(()-> new EmailDuplicateException("Invalid credentials"));
-
-        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
+        if (user.getPassword() == null || !passwordEncoder.matches( requestDto.getPassword(), user.getPassword())) {
             throw  new InvalidPasswordException("Sorry, invalid password");
         }
         String token = jwtService.generateToken(user);
