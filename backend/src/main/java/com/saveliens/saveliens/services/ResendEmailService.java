@@ -9,7 +9,14 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+
 @Service
+@ConditionalOnProperty(
+        name = "saveliens.email.provider",
+        havingValue = "resend",
+        matchIfMissing = true
+)
 public class ResendEmailService implements EmailService {
 
     private final RestClient client;
