@@ -3,6 +3,7 @@ import styles from './Sidebar.module.css';
 import { LayoutDashboard, BookOpen, Link2, BarChart2, User, Settings, LogOut, Star, Menu, X } from 'lucide-react';
 import logo from "../assets/saveliens_logo.png"
 import { Link, NavLink } from 'react-router';
+import { logout } from "../utils/auth";
 
 const navItems = [
   {
@@ -28,7 +29,7 @@ const navItems = [
 ];
 
 const bottomItems = [
-  { icon: Settings, label: 'Settings' },
+  { icon: Settings, label: 'Settings', path: '/settings' },
 ];
 
 export default function Sidebar({firstName}) {
@@ -109,13 +110,20 @@ export default function Sidebar({firstName}) {
         </nav>
 
         <div className={styles.bottomNav}>
-          {bottomItems.map(({ icon: Icon, label }) => (
-            <a key={label} className={styles.navItem} href="#" onClick={closeSidebar}>
+          {bottomItems.map(({ icon: Icon, label, path }) => (
+            <NavLink
+              key={label}
+              to={path}
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.active : ""}`
+              }
+            >
               <Icon size={18} className={styles.navIcon} />
               <span className={styles.navText}>{label}</span>
-            </a>
+            </NavLink>
           ))}
-          <Link to="/signin" className={`${styles.navItem} ${styles.logout}`}>
+          <Link to="/signin" className={`${styles.navItem} ${styles.logout}`} onClick={logout}>
             <LogOut size={18} className={styles.navIcon} />
             <span className={styles.navText}>Logout</span>
           </Link>

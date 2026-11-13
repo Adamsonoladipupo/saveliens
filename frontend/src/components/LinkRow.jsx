@@ -6,6 +6,8 @@ import {
   Link2
 } from 'lucide-react';
 
+import { apiFetch } from "../services/apiClient";
+
 export default function LinkRow({
   id,
   url,
@@ -14,6 +16,7 @@ export default function LinkRow({
   setLinks,
   setDashboardData,
 }) {
+
 
   // const BASE_URL ="http://localhost:8080/api/topic";
   const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/topic`;
@@ -32,13 +35,9 @@ export default function LinkRow({
         sessionStorage.getItem("token");
 
       const response = await fetch(
-        `${BASE_URL}/${topicId}/links/${id}`,
+        `/api/topic/${encodeURIComponent(topicId)}/links/${encodeURIComponent(id)}`,
         {
           method: "DELETE",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         }
       );
 

@@ -1,65 +1,108 @@
-import React from "react";
-import styles from "./Topics.module.css"
+
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import Topics from "../components/Topics";
+import PageSkeleton from "../components/skeletons/PageSkeleton";
+import PageError from "../components/PageError";
 
+import styles from "./Topics.module.css";
 
+import { apiFetch,AuthenticationError,} from "../services/apiClient";
 
-const TopicsPage = () => {
-    // const BASE_URL = "http://localhost:8080/api/dashboard";
-    const BASE_URL=`${import.meta.env.VITE_API_BASE_URL}/api/dashboard`;
+export default function TopicsPage() {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
-    const [dashboardData, setDashboardData] = useState(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = sessionStorage.getItem("token");
-        if (!token) {
-            navigate("/signin");
-            return <h1>Loading Empty token ...</h1> ;
+  const loadTopics = useCallback(async (signal) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await apiFetch("/api/dashboard/me", {
+        signal,
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        navigate("/signin", { replace: true });
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(`Failed to load topics: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!signal.aborted) {
+        setDashboardData(data);
+      }
+    } 
+    catch (err) {
+        if (signal.aborted) return;
+
+        if (err instanceof AuthenticationError) {
+        navigate("/signin", { replace: true });
+        return;
         }
 
-        fetch(`${BASE_URL}/me`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-        }
-        })
-        .then((response)=> 
-        {
-            if (!response.ok) {
-                throw new Error("Unauthorized");
-            }
-            return response.json();
-            
-        })
-        .then((data)=> setDashboardData(data))
-        .catch((error) => {
-            console.log(error);
-            // sessionStorage.removeItem("token");
-            // sessionStorage.removeItem("email");
-            navigate("/signin");
-        });
-    }, []);
-    if(!dashboardData){
-        return <h1>Loading ...</h1>
+        console.error("Page loading error:", err);
+
+        setError(
+        "Unable to load your workspace. Please try again."
+        );
     }
+    
+    finally {
+      if (!signal.aborted) {
+        setLoading(false);
+      }
+    }
+  }, [navigate]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    loadTopics(controller.signal);
+
+    return () => controller.abort();
+  }, [loadTopics, retryCount]);
+
+  if (loading) {
+    return <PageSkeleton variant="topics" />;
+  }
+
+  if (error) {
     return (
-        <>
-            <div className={styles.layout}>
-                <Sidebar firstName={dashboardData?.firstName}/>
-                <main className={styles.main}>
-                    <SearchBar />
-                    <Topics topics={dashboardData?.topics} setDashboardData={setDashboardData} />
-                </main>
-            </div>
-        </>
-    )
-}
+      <PageError
+        message={error}
+        onRetry={() => setRetryCount((count) => count + 1)}
+      />
+    );
+  }
 
-export default TopicsPage;
+  if (!dashboardData) {
+    return null;
+  }
+
+  return (
+    <div className={styles.layout}>
+      <Sidebar firstName={dashboardData.firstName} />
+
+      <main className={styles.main}>
+        <SearchBar />
+
+        <Topics
+          topics={dashboardData.topics || []}
+          setDashboardData={setDashboardData}
+        />
+      </main>
+    </div>
+  );
+}
