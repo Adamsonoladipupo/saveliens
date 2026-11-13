@@ -6,6 +6,7 @@ import LandingPage from "../pages/landingPage";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import Dashboard from "../pages/Dashbaord";
+import Analyze from "../pages/Analyze";
 import Topics from "../pages/TopicPage";
 import LinksPage from "../pages/LinksPage";
 import TopicDetails from "../components/TopicDetails";
@@ -17,6 +18,7 @@ import Settings from "../pages/Settings";
 
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+
 
 const Router = createBrowserRouter([
   // Public routes
@@ -73,8 +75,16 @@ const Router = createBrowserRouter([
         path: "/settings",
         element: <Settings />,
       },
+      {
+        path: "/analyze",
+        element: <Analyze />,
+      },
+
+
     ],
   },
 ]);
+
+
 
 export default Router;
